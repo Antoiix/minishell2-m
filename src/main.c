@@ -16,5 +16,6 @@ int main(int ac, __attribute_maybe_unused__ char **av, char **env)
     if (ac != 1)
         return 84;
     launcher(list, &status);
+    free_list(&list);
     return status;
 }

@@ -7,6 +7,13 @@
 
 #include "my.h"
 
+static void cat_path(char *tmp_path, char **paths, int i, char *arg)
+{
+    my_strcpy(tmp_path, paths[i]);
+    my_strcat(tmp_path, "/");
+    my_strcat(tmp_path, arg);
+}
+
 char *different_paths(list_t *list, char *arg)
 {
     char *tmp_path = NULL;
@@ -19,14 +26,15 @@ char *different_paths(list_t *list, char *arg)
     for (int i = 0; paths[i] != NULL; i++) {
         size = my_strlen(paths[i]) + my_strlen(arg) + 2;
         tmp_path = malloc(sizeof(char) * size);
-        my_strcpy(tmp_path, paths[i]);
-        my_strcat(tmp_path, "/");
-        my_strcat(tmp_path, arg);
+        cat_path(tmp_path, paths, i, arg);
         tmp_path[size - 1] = '\0';
-        if (access(tmp_path, F_OK) == 0)
+        if (access(tmp_path, F_OK) == 0) {
+            free_arr(paths);
             return tmp_path;
+        }
         free(tmp_path);
     }
+    free_arr(paths);
     return NULL;
 }
 
@@ -38,6 +46,7 @@ int put_on_path(char **path, char **args, list_t *list)
         *path = my_strdup(path_found);
     } else
         *path = my_strdup(args[0]);
+    free(path_found);
     if (access(*path, F_OK) == 0)
         return 1;
     write(2, args[0], my_strlen(args[0]));
@@ -85,6 +94,7 @@ int error_commands(char **args, char **path, int *status, list_t *list)
         return 1;
     }
     if (put_on_path(path, args, list) == 0) {
+        free(*path);
         *status = 1;
         return 1;
     }
@@ -99,12 +109,15 @@ void verif_commands(char *buf, list_t *list, int *status)
     char *path = NULL;
 
     args = my_str_to_word_array(buf, " \n\t");
-    if (error_commands(args, &path, status, list) == 1)
+    if (error_commands(args, &path, status, list) == 1) {
+        free_arr(args);
         return;
+    }
     val_f = fork();
     if (val_f == 0)
         command_exec(path, args, list);
     waitpid(val_f, &return_val, 0);
     print_status(status, return_val);
+    free_arr(args);
     free(path);
 }
