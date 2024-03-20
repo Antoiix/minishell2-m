@@ -80,8 +80,11 @@ void print_status(int *status, int return_val)
     *status = return_val % 255;
     if (return_val == 0)
         return;
-    write(2, strsignal(WTERMSIG(return_val)),
-        my_strlen(strsignal(WTERMSIG(return_val))));
+    if (return_val == 136)
+        write(2, "Floating exception", 18);
+    else
+        write(2, strsignal(WTERMSIG(return_val)),
+            my_strlen(strsignal(WTERMSIG(return_val))));
     if (WCOREDUMP(return_val))
         write(2, " (core dumped)", 14);
     write(2, "\n", 1);
