@@ -10,16 +10,20 @@
 int arg_exist(char **args, list_t *list)
 {
     char *str = "\0";
+    int at_end = 0;
 
     if (args[2])
         str = my_strdup(args[2]);
     for (list_t *tmp = list; tmp; tmp = tmp->next) {
         if (my_strcmp(tmp->arg, args[1]) == 0) {
+            free(tmp->val);
             tmp->val = my_strdup(str);
-            return 1;
+            at_end = 1;
         }
     }
-    return 0;
+    if (args[2])
+        free(str);
+    return at_end;
 }
 
 int alpha_contains(char *arg)
@@ -54,6 +58,7 @@ void verif_args2(list_t *list, char **args, int *status)
         add_node(&list, args[1], "\0");
         *status = 0;
     }
+    free_arr(args);
 }
 
 void verif_args3(list_t *list, char **args, int *status)
@@ -75,6 +80,7 @@ void verif_args3(list_t *list, char **args, int *status)
         add_node(&list, args[1], args[2]);
         *status = 0;
     }
+    free_arr(args);
 }
 
 void setenv_command(list_t *list, char *buf, int *status)
@@ -86,16 +92,17 @@ void setenv_command(list_t *list, char *buf, int *status)
     if (size > 3) {
         write(2, "setenv: Too many arguments.\n", 28);
         *status = 1;
+        free_arr(args);
         return;
     }
     if (size == 1) {
         env_command(list, buf, status);
+        free_arr(args);
         return;
     }
     *status = 0;
-    if (size == 2) {
+    if (size == 2)
         verif_args2(list, args, status);
-        return;
-    }
-    verif_args3(list, args, status);
+    else
+        verif_args3(list, args, status);
 }

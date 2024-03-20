@@ -49,10 +49,11 @@ void add_node(list_t **list, char *arg, char *val);
 int my_strcmp(char const *s1, char const *s2);
 int my_strncmp(char const *s1, char const *s2, int n);
 void setenv_command(list_t *list, char *buf, int *status);
-void exit_command(char *buf);
+int exit_command(char *buf, int *status);
 void del_node(list_t **list, char *str);
 void unsetenv_command(list_t *list, char *buf, int *status);
 void cd_command(char *buf, list_t *list, int *status);
 void free_arr(char **arr);
+void free_list(list_t **head);
 
 #endif

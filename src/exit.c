@@ -7,7 +7,7 @@
 
 #include "my.h"
 
-void exit_command(char *buf)
+int exit_command(char *buf, int *status)
 {
     char **args = my_str_to_word_array(buf, " ");
     int size;
@@ -15,10 +15,14 @@ void exit_command(char *buf)
     for (size = 0; args[size] != NULL; size++);
     if (size > 2) {
         write(2, "exit: Expression Syntax\n", 24);
-        return;
+        free_arr(args);
+        return 1;
     }
     mini_printf("exit\n");
     if (args[1])
-        exit(my_getnbr(args[1]) % 256);
-    exit(0);
+        *status = my_getnbr(args[1]) % 256;
+    else
+        *status = 0;
+    free_arr(args);
+    return -1;
 }

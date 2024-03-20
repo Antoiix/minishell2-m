@@ -37,8 +37,15 @@ char *val_calc(char *env_line)
 list_t *env_to_list(char **env)
 {
     list_t *list = NULL;
+    char *val;
+    char *arg;
 
-    for (int i = 0; env[i] != NULL; i++)
-        add_node(&list, arg_calc(env[i]), val_calc(env[i]));
+    for (int i = 0; env[i] != NULL; i++) {
+        arg = arg_calc(env[i]);
+        val = val_calc(env[i]);
+        add_node(&list, arg, val);
+        free(arg);
+        free(val);
+    }
     return list;
 }

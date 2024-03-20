@@ -45,11 +45,16 @@ void del_tmp(list_t *tmp, list_t *tmp_bef)
 void del_node(list_t **list, char *str)
 {
     list_t *tmp_bef = NULL;
+    list_t *next;
 
-    for (list_t *tmp = *list; tmp; tmp = tmp->next) {
+    for (list_t *tmp = *list; tmp; tmp = next) {
+        next = tmp->next;
         if (my_strcmp(tmp->arg, str) == 0) {
             del_tmp(tmp, tmp_bef);
-        }
-        tmp_bef = tmp;
+            free(tmp->arg);
+            free(tmp->val);
+            free(tmp);
+        } else
+            tmp_bef = tmp;
     }
 }

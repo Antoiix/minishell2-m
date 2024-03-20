@@ -16,10 +16,12 @@ void unsetenv_command(list_t *list, char *buf, int *status)
     if (size < 2) {
         write(2, "setenv: Too few arguments.\n", 27);
         *status = 1;
+        free_arr(args);
         return;
     }
     for (int i = 1; args[i]; i++) {
         del_node(&list, args[i]);
     }
+    free_arr(args);
     *status = 0;
 }
