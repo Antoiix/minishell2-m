@@ -16,10 +16,12 @@ void env_command(list_t *list, char *buf, int *status)
         write(2, args[1], my_strlen(args[1]));
         write(2, "': No such file or directory\n", 29);
         *status = 127;
+        free_arr(args);
         return;
     }
     for (list_t *tmp = list; tmp; tmp = tmp->next) {
         mini_printf("%s=%s\n", tmp->arg, tmp->val);
     }
     *status = 0;
+    free_arr(args);
 }
