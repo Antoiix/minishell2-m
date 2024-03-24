@@ -28,4 +28,7 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
+tests_run:
+	cat "test"
+
 re: clean fclean all
