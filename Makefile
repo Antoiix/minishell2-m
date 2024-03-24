@@ -29,6 +29,6 @@ fclean: clean
 	rm -f $(NAME)
 
 tests_run:
-	cat "test"
+	echo "test"
 
 re: clean fclean all
