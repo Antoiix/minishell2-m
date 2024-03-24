@@ -22,7 +22,7 @@ jobs:
       - name: Set CURRENT_URL
         id: set_current_url
         run: |
-          MIRROR_URL="git@github.com:Antoiix/choco-test.git"
+          MIRROR_URL="$MIRROR_URL"
           CURRENT_URL=$(echo -e "$MIRROR_URL" | cut -d ":" -f 2 | cut -d "." -f 1)
           echo "current_url=$CURRENT_URL" >> $GITHUB_OUTPUT
 
