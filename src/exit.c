@@ -18,7 +18,6 @@ int exit_command(char *buf, int *status)
         free_arr(args);
         return 1;
     }
-    mini_printf("exit\n");
     if (args[1])
         *status = my_getnbr(args[1]) % 256;
     else

@@ -7,14 +7,15 @@
 
 #include "my.h"
 
-void line_exec(char *buf, list_t *list, int *status)
+int line_exec(char *buf, list_t *list, int *status)
 {
     int return_val;
 
     return_val = verif_builtins(buf, list, status);
-    if (return_val == 1)
-        return;
+    if (return_val != 0)
+        return return_val;
     verif_commands(buf, list, status);
+    return 0;
 }
 
 void dup_in(int pipe_fd[2], char **args)
@@ -56,7 +57,11 @@ int piper(char *buf, list_t *list, int *status)
     }
     i = pipe_loop(pipe_fd, command, list, status);
     dup2(out_fd, STDOUT_FILENO);
-    line_exec(command[i], list, status);
+    if (line_exec(command[i], list, status) == -1) {
+        dup2(in_fd, STDIN_FILENO);
+        free_arr(command);
+        return -1;
+    }
     dup2(in_fd, STDIN_FILENO);
     free_arr(command);
     return 1;

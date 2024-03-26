@@ -16,22 +16,40 @@ int get_command(char **buf, size_t *size)
     return 0;
 }
 
-int exec_suite(char *buf, list_t *list, int *status)
+void exec_loop(char **commands, list_t *list, int *status, int *return_exit)
 {
     int return_val;
-    char **commands = my_str_to_word_array(buf, ";\n");
+    int pipe_val;
 
     for (int i = 0; commands[i] != NULL; i++) {
-        if (piper(commands[i], list, status) == 1)
+        pipe_val = piper(commands[i], list, status);
+        if (pipe_val == 1)
             continue;
+        if (pipe_val == -1) {
+            *return_exit = *status;
+            break;
+        }
         return_val = verif_builtins(commands[i], list, status);
         if (return_val == 1)
             continue;
         if (return_val == -1) {
-            free_arr(commands);
-            return -1;
+            *return_exit = *status;
+            continue;
         }
         verif_commands(commands[i], list, status);
+    }
+}
+
+int exec_suite(char *buf, list_t *list, int *status)
+{
+    char **commands = my_str_to_word_array(buf, ";\n");
+    int return_exit = -1;
+
+    exec_loop(commands, list, status, &return_exit);
+    if (return_exit != -1) {
+        mini_printf("exit\n");
+        free_arr(commands);
+        return -1;
     }
     free_arr(commands);
     return 0;
