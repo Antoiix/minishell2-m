@@ -29,7 +29,6 @@ void print_status(int *status, int return_val)
 int error_commands(char **args, char **path, int *status, list_t *list)
 {
     if (args[0] == NULL) {
-        free(path);
         return 1;
     }
     if (put_on_path(path, args, list) == 0) {
