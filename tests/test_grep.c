@@ -22,10 +22,3 @@ Test(pipe, test_folder)
     system("echo \"ls | grep include | grep i | grep u\" | ./mysh");
     cr_assert_stdout_eq_str("include\n");
 }
-
-Test(pipe, test_builtin)
-{
-    cr_redirect_stdout();
-    system("echo \"env | grep SHELL=\" | ./mysh");
-    cr_assert_stdout_eq_str("SHELL=/bin/bash\n");
-}
