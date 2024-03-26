@@ -55,9 +55,10 @@ void unsetenv_command(list_t *list, char *buf, int *status);
 void cd_command(char *buf, list_t *list, int *status);
 void free_arr(char **arr);
 void free_list(list_t **head);
-void my_pipe(char *av_one, char *av_two, list_t *list, int *status);
 int error_commands(char **args, char **path, int *status, list_t *list);
 int put_on_path(char **path, char **args, list_t *list);
 void command_exec(char *path, char **args, list_t *list);
+int size_arr(char **arr);
+int piper(char *buf, list_t *list, int *status);
 
 #endif
