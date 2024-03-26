@@ -22,3 +22,10 @@ Test(pipe, test_folder)
     system("echo \"ls | grep include | grep i | grep u\" | ./mysh");
     cr_assert_stdout_eq_str("include\n");
 }
+
+Test(pipe, test_with_exit)
+{
+    cr_redirect_stdout();
+    system("echo \"exit | ls | grep src\" | ./mysh");
+    cr_assert_stdout_eq_str("src\n");
+}
