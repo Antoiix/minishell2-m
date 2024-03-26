@@ -58,3 +58,11 @@ void del_node(list_t **list, char *str)
             tmp_bef = tmp;
     }
 }
+
+int size_arr(char **arr)
+{
+    int size;
+
+    for (size = 0; arr[size] != NULL; size++);
+    return size;
+}

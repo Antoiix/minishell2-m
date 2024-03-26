@@ -28,6 +28,8 @@ void launcher(list_t *list, int *status)
         if (my_strlen(buf) == 1)
             continue;
         buf[my_strlen(buf)] = '\0';
+        if (piper(buf, list, status) == 1)
+            continue;
         return_val = verif_builtins(buf, list, status);
         if (return_val == 1)
             continue;
