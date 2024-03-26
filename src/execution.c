@@ -9,8 +9,8 @@
 
 void print_status(int *status, int return_val)
 {
-    if (WEXITSTATUS(return_val) == 1) {
-        *status = 1;
+    if (WTERMSIG(return_val) == 0) {
+        *status = WEXITSTATUS(return_val);
         return;
     }
     *status = return_val % 255;
