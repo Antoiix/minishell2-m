@@ -16,27 +16,43 @@ int get_command(char **buf, size_t *size)
     return 0;
 }
 
-void exec_loop(char **commands, list_t *list, int *status, int *return_exit)
+int exec_for(char **commands, int *tmp_val[2], list_t *list, int *return_exit)
 {
-    int return_val;
-    int pipe_val;
+    int i;
 
-    for (int i = 0; commands[i] != NULL; i++) {
-        pipe_val = piper(commands[i], list, status);
-        if (pipe_val == 1)
+    for (i = 0; commands[i] != NULL; i++) {
+        *tmp_val[1] = piper(commands[i], list, tmp_val[0]);
+        if (*tmp_val[1] == 1)
             continue;
-        if (pipe_val == -1) {
-            *return_exit = *status;
+        if (*tmp_val[1] == -1) {
+            *return_exit = *tmp_val[1];
             break;
         }
-        return_val = verif_builtins(commands[i], list, status);
-        if (return_val == 1)
+        *tmp_val[1] = verif_builtins(commands[i], list, tmp_val[0]);
+        if (*tmp_val[1] == 1)
             continue;
-        if (return_val == -1) {
-            *return_exit = *status;
+        if (*tmp_val[1] == -1) {
+            *return_exit = *tmp_val[0];
             continue;
         }
-        verif_commands(commands[i], list, status);
+        verif_commands(commands[i], list, tmp_val[0]);
+    }
+    return i;
+}
+
+void exec_loop(char **commands, list_t *list, int *status, int *return_exit)
+{
+    int return_val = 0;
+    int *tmp_val[2];
+    int i;
+    int k = 0;
+
+    tmp_val[0] = status;
+    tmp_val[1] = &k;
+    i = exec_for(commands, tmp_val, list, return_exit);
+    for (int j = 0; j != i; j++) {
+        wait(&return_val);
+        print_status(status, return_val);
     }
 }
 

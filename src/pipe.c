@@ -43,6 +43,18 @@ int pipe_loop(int pipe_fd[2], char **command, list_t *list, int *status)
     return i;
 }
 
+void status_pr(char **command, int *status, int in_fd, int i)
+{
+    int return_val;
+
+    dup2(in_fd, STDIN_FILENO);
+    for (int j = 0; j != i - 1; j++) {
+        wait(&return_val);
+        print_status(status, return_val);
+    }
+    free_arr(command);
+}
+
 int piper(char *buf, list_t *list, int *status)
 {
     int in_fd = dup(STDIN_FILENO);
@@ -62,7 +74,6 @@ int piper(char *buf, list_t *list, int *status)
         free_arr(command);
         return -1;
     }
-    dup2(in_fd, STDIN_FILENO);
-    free_arr(command);
+    status_pr(command, status, in_fd, i);
     return 1;
 }
