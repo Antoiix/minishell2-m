@@ -16,22 +16,56 @@ int get_command(char **buf, size_t *size)
     return 0;
 }
 
+int exec_for(char **commands, int *tmp_val[2], list_t *list, int *return_exit)
+{
+    int i;
+
+    for (i = 0; commands[i] != NULL; i++) {
+        *tmp_val[1] = piper(commands[i], list, tmp_val[0]);
+        if (*tmp_val[1] == 1)
+            continue;
+        if (*tmp_val[1] == -1) {
+            *return_exit = *tmp_val[1];
+            break;
+        }
+        *tmp_val[1] = verif_builtins(commands[i], list, tmp_val[0]);
+        if (*tmp_val[1] == 1)
+            continue;
+        if (*tmp_val[1] == -1) {
+            *return_exit = *tmp_val[0];
+            continue;
+        }
+        verif_commands(commands[i], list, tmp_val[0]);
+    }
+    return i;
+}
+
+void exec_loop(char **commands, list_t *list, int *status, int *return_exit)
+{
+    int return_val = 0;
+    int *tmp_val[2];
+    int i;
+    int k = 0;
+
+    tmp_val[0] = status;
+    tmp_val[1] = &k;
+    i = exec_for(commands, tmp_val, list, return_exit);
+    for (int j = 0; j != i; j++) {
+        wait(&return_val);
+        print_status(status, return_val);
+    }
+}
+
 int exec_suite(char *buf, list_t *list, int *status)
 {
-    int return_val;
     char **commands = my_str_to_word_array(buf, ";\n");
+    int return_exit = -1;
 
-    for (int i = 0; commands[i] != NULL; i++) {
-        if (piper(commands[i], list, status) == 1)
-            continue;
-        return_val = verif_builtins(commands[i], list, status);
-        if (return_val == 1)
-            continue;
-        if (return_val == -1) {
-            free_arr(commands);
-            return -1;
-        }
-        verif_commands(commands[i], list, status);
+    exec_loop(commands, list, status, &return_exit);
+    if (return_exit != -1) {
+        mini_printf("exit\n");
+        free_arr(commands);
+        return -1;
     }
     free_arr(commands);
     return 0;

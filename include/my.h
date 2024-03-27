@@ -60,5 +60,6 @@ int put_on_path(char **path, char **args, list_t *list);
 void command_exec(char *path, char **args, list_t *list);
 int size_arr(char **arr);
 int piper(char *buf, list_t *list, int *status);
+void print_status(int *status, int return_val);
 
 #endif
