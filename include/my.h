@@ -38,7 +38,7 @@ void my_pf_putchar(char c, int *count);
 int my_pf_putstr(char const *str, int *count);
 char *my_strdup(char const *src);
 void launcher(list_t *list, int *status);
-void verif_commands(char *buf, list_t *list, int *status);
+void verif_commands(char *buf, list_t *list, int *status, int wait_int);
 char *my_strcat(char *dest, char const *src);
 char *my_strcpy(char *dest, char const *src);
 int verif_builtins(char *buf, list_t *list, int *status);

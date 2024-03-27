@@ -18,9 +18,8 @@ Test(pipe, test_grep)
 
 Test(pipe, test_folder)
 {
-    system("echo \"ls | grep include | grep i | grep u\" | ./mysh");
     cr_redirect_stdout();
-    system("echo \"ls | grep include | grep i | grep u\" | ./mysh");
+    system("echo \"ls | grep include | grep i | grep u | grep include\" | ./mysh");
     cr_assert_stdout_eq_str("include\n");
 }
 
