@@ -12,7 +12,7 @@ void print_status(int *status, int return_val)
     if (return_val == 0 || return_val == -1) {
         return;
     }
-    if (WTERMSIG(return_val) == return_val) {
+    if (WTERMSIG(return_val) == return_val && WEXITSTATUS(return_val) != 0) {
         return;
     }
     *status = return_val % 255;
