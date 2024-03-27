@@ -35,25 +35,19 @@ int exec_for(char **commands, int *tmp_val[2], list_t *list, int *return_exit)
             *return_exit = *tmp_val[0];
             continue;
         }
-        verif_commands(commands[i], list, tmp_val[0]);
+        verif_commands(commands[i], list, tmp_val[0], 1);
     }
     return i;
 }
 
 void exec_loop(char **commands, list_t *list, int *status, int *return_exit)
 {
-    int return_val = 0;
     int *tmp_val[2];
-    int i;
     int k = 0;
 
     tmp_val[0] = status;
     tmp_val[1] = &k;
-    i = exec_for(commands, tmp_val, list, return_exit);
-    for (int j = 0; j != i; j++) {
-        wait(&return_val);
-        print_status(status, return_val);
-    }
+    exec_for(commands, tmp_val, list, return_exit);
 }
 
 int exec_suite(char *buf, list_t *list, int *status)

@@ -7,14 +7,14 @@
 
 #include "my.h"
 
-int line_exec(char *buf, list_t *list, int *status)
+int line_exec(char *buf, list_t *list, int *status, int wait_int)
 {
     int return_val;
 
     return_val = verif_builtins(buf, list, status);
     if (return_val != 0)
         return return_val;
-    verif_commands(buf, list, status);
+    verif_commands(buf, list, status, wait_int);
     return 0;
 }
 
@@ -36,7 +36,7 @@ int pipe_loop(int pipe_fd[2], char **command, list_t *list, int *status)
         dup2(pipe_fd[1], STDOUT_FILENO);
         args = my_str_to_word_array(command[i], " \n\t");
         if (my_strcmp(args[0], "exit") != 0) {
-            line_exec(command[i], list, status);
+            line_exec(command[i], list, status, 0);
         }
         dup_in(pipe_fd, args);
     }
@@ -69,7 +69,7 @@ int piper(char *buf, list_t *list, int *status)
     }
     i = pipe_loop(pipe_fd, command, list, status);
     dup2(out_fd, STDOUT_FILENO);
-    if (line_exec(command[i], list, status) == -1) {
+    if (line_exec(command[i], list, status, 1) == -1) {
         dup2(in_fd, STDIN_FILENO);
         free_arr(command);
         return -1;

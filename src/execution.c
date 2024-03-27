@@ -9,12 +9,12 @@
 
 void print_status(int *status, int return_val)
 {
-    if (return_val == 0 || return_val == -1) {
+    if (return_val <= 0 || return_val > 254) {
         return;
     }
-    if (WTERMSIG(return_val) == return_val && WEXITSTATUS(return_val) != 0) {
+    if (WTERMSIG(return_val) + 1 == return_val % 255 &&
+        WEXITSTATUS(return_val) != 0)
         return;
-    }
     *status = return_val % 255;
     if (return_val == 136)
         write(2, "Floating exception", 18);
@@ -39,11 +39,12 @@ int error_commands(char **args, char **path, int *status, list_t *list)
     return 0;
 }
 
-void verif_commands(char *buf, list_t *list, int *status)
+void verif_commands(char *buf, list_t *list, int *status, int wait_int)
 {
     char **args;
     int val_f;
     char *path = NULL;
+    int return_val;
 
     args = my_str_to_word_array(buf, " \n\t");
     if (error_commands(args, &path, status, list) == 1) {
@@ -53,6 +54,10 @@ void verif_commands(char *buf, list_t *list, int *status)
     val_f = fork();
     if (val_f == 0)
         command_exec(path, args, list);
+    if (wait_int == 1) {
+        waitpid(val_f, &return_val, 0);
+        print_status(status, return_val);
+    }
     free_arr(args);
     free(path);
 }
