@@ -29,3 +29,10 @@ Test(pipe, test_with_exit)
     system("echo \"exit | ls | grep src\" | ./mysh");
     cr_assert_stdout_eq_str("src\n");
 }
+
+Test(pipe, test_empty_pipe)
+{
+    cr_redirect_stderr();
+    system("echo \" | \" | ./mysh");
+    cr_assert_stderr_eq_str("|: Command not found.\n");
+}
