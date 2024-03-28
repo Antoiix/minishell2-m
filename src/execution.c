@@ -54,10 +54,10 @@ void verif_commands(char *buf, list_t *list, int *status, int wait_int)
     val_f = fork();
     if (val_f == 0)
         command_exec(path, args, list);
+    free_arr(args);
+    free(path);
     if (wait_int == 1) {
         waitpid(val_f, &return_val, 0);
         print_status(status, return_val);
     }
-    free_arr(args);
-    free(path);
 }
