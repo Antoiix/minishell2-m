@@ -45,7 +45,7 @@ int pipe_loop(int pipe_fd[2], char **command, list_t *list, int *status)
 
 void status_pr(char **command, int *status, int in_fd, int i)
 {
-    int return_val;
+    int return_val = 0;
 
     dup2(in_fd, STDIN_FILENO);
     for (int j = 0; j != i - 1; j++) {
