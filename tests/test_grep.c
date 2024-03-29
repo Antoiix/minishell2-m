@@ -7,7 +7,8 @@
 
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
-#include "my.h"
+#include "../include/my.h"
+int exec_suite(char *buf, list_t *list, int *status);
 
 Test(pipe, test_grep)
 {
@@ -35,4 +36,11 @@ Test(pipe, test_empty_pipe)
     cr_redirect_stderr();
     system("echo \" | \" | ./mysh");
     cr_assert_stderr_eq_str("|: Command not found.\n");
+}
+
+Test(pipe, classic_grep)
+{
+    cr_redirect_stdout();
+    system("echo \"ls | grep include\" | ./mysh");
+    cr_assert_stdout_eq_str("include\n");
 }

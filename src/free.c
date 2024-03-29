@@ -31,3 +31,12 @@ void free_list(list_t **head)
         current = next;
     }
 }
+
+void free_command(command_t **com_list)
+{
+    for (int i = 0; com_list[i] != NULL; i++) {
+        free(com_list[i]->command);
+        free(com_list[i]);
+    }
+    free(com_list);
+}
