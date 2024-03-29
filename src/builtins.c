@@ -21,6 +21,10 @@ int verif_env(char *buf, list_t *list, char *arg, int *status)
         unsetenv_command(list, buf, status);
         return 1;
     }
+    if (my_strcmp(arg, "|") == 0) {
+        write(2, "Invalid null command.\n", 22);
+        return 1;
+    }
     return 0;
 }
 
