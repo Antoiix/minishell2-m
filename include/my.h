@@ -68,5 +68,11 @@ void print_status(int *status, int return_val);
 command_t **com_list_c(char *buf);
 void print_com_list(command_t **com_list);
 void free_command(command_t **com_list_c);
+int size_com(command_t **com_list);
+char *clean_str(char *str);
+int redirect_l(char *command, list_t *list, int *status);
+int redirect_d(char *command, list_t *list, int *status);
+int line_exec(char *buf, list_t *list, int *status, int wait_int);
+void redir_loop(command_t **command, int val[2], list_t *list, int *status);
 
 #endif

@@ -7,6 +7,14 @@
 
 #include "my.h"
 
+int size_com(command_t **com_list)
+{
+    int i;
+
+    for (i = 0; com_list[i] != NULL; i++);
+    return i;
+}
+
 void print_com_list(command_t **com_list)
 {
     for (int i = 0; com_list[i] != NULL; i++) {
@@ -18,6 +26,8 @@ void print_com_list(command_t **com_list)
 
 void command_dump(char *buf, int *buf_tmp, command_t **com_list, int i)
 {
+    if (buf[*buf_tmp] == '\0')
+        return;
     if (buf[*buf_tmp + 1] == buf[*buf_tmp] && buf[*buf_tmp] == '>') {
         com_list[i]->sep = 'r';
         *buf_tmp = *buf_tmp + 1;
