@@ -74,5 +74,6 @@ int redirect_l(char *command, list_t *list, int *status);
 int redirect_d(char *command, list_t *list, int *status);
 int line_exec(char *buf, list_t *list, int *status, int wait_int);
 void redir_loop(command_t **command, int val[2], list_t *list, int *status);
+void redir_l(command_t **command, int val[2], list_t *list, int *status);
 
 #endif

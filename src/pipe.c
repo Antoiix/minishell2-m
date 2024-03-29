@@ -44,6 +44,7 @@ int pipe_cond(char *command, int pipe_fd[2], list_t *list, int *status)
     return 0;
 }
 
+//redir_l(command, val, list, sta);
 int pipe_loop(command_t **command, list_t *list, int *sta)
 {
     int val[2] = {0};

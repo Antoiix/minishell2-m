@@ -5,6 +5,7 @@
 ** redirect.c
 */
 
+//#define _GNU_SOURCE
 #include "my.h"
 
 int redirect_d(char *command, list_t *list, int *status)
@@ -59,3 +60,33 @@ void redir_loop(command_t **command, int val[2], list_t *list, int *status)
         val[1] = redirect_d(command[val[0]]->command, list, status);
     }
 }
+
+/*void redir_l(command_t **command, int val[2], list_t *list, int *status)
+{
+    int tmp_fd;
+    char *str;
+    char *input = NULL;
+    size_t size = 0;
+
+    if (command[val[0]]->sep == 'l') {
+        str = clean_str(command[val[0] + 1]->command);
+        tmp_fd = open(".", O_RDWR | O_TMPFILE | O_APPEND, 0666);
+        mini_printf("fd %i\n", tmp_fd);
+        while (1) {
+            mini_printf("? ");
+            getline(&input, &size, stdin);
+            mini_printf("%s, %s\n", clean_str(input), str);
+            if (my_strcmp(clean_str(input), str) == 0) {
+                break;
+            }
+            else {
+                write(tmp_fd, input, my_strlen(input));
+            }
+        }
+        free(str);
+        dup2(tmp_fd, STDIN_FILENO);
+        val[1] = redirect_l(command[val[0]]->command, list, status);
+        close(tmp_fd);
+    }
+}
+*/
