@@ -72,16 +72,18 @@ char **my_str_to_word_array(char const *str, char *pattern)
     int i = 0;
     int j = 0;
     int k = 0;
-    char **array = NULL;
     int nb_words = words(str, pattern);
+    char **array = malloc(sizeof(char *) * (nb_words + 1));
 
-    array = malloc(sizeof(char *) * (nb_words + 1));
+    if (!array)
+        return NULL;
     for (; i != nb_words; i++) {
         array[i] = malloc((sizeof(char)) * (nb_char_wds(str, j, pattern) + 1));
+        if (!array[i])
+            return NULL;
         j += nb_spaces(str, j, pattern);
-        for (k = 0; k != nb_char_wds(str, j, pattern); k++) {
+        for (k = 0; k != nb_char_wds(str, j, pattern); k++)
             array[i][k] = str[j + k];
-        }
         array[i][k] = '\0';
         j += nb_char_wds(str, j, pattern) + 1;
     }

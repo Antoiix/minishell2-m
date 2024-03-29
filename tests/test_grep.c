@@ -35,7 +35,7 @@ Test(pipe, test_empty_pipe)
 {
     cr_redirect_stderr();
     system("echo \" | \" | ./mysh");
-    cr_assert_stderr_eq_str("|: Command not found.\n");
+    cr_assert_stderr_eq_str("Invalid null command.\n");
 }
 
 Test(pipe, classic_grep)

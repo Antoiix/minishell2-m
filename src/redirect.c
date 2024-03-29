@@ -33,7 +33,7 @@ int redirect_l(char *command, list_t *list, int *status)
         return -1;
     }
     if (my_strcmp(args[0], "exit") != 0) {
-        line_exec(command, list, status, 0);
+        line_exec(command, list, status, 1);
     }
     free_arr(args);
     return 0;
