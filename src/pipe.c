@@ -59,6 +59,7 @@ int pipe_loop(command_t **command, list_t *list, int *sta)
             str = clean_str(command[val[0] + 1]->command);
             tmp_fd = open(str, O_RDONLY);
             free(str);
+            dup2(tmp_fd, STDIN_FILENO);
             val[1] = redirect_l(command[val[0]]->command, list, sta);
         }
         if (val[1] == -1)
