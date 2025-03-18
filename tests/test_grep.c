@@ -8,7 +8,7 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include "../include/my.h"
-int exec_suite(char *buf, list_t *list, int *status);
+int exec_suite(char * buf, list_t *list, int *status);
 
 Test(pipe, test_grep)
 {
